@@ -1,6 +1,6 @@
 class Attack {
     
-    static all_attacks = [];
+    static all_attacks = {};
 
     static fill_attacks() {
         for (let move of fast_moves) {
