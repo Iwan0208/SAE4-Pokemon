@@ -29,6 +29,6 @@ class Attack {
     }
 
     toString() {
-        console.log(this.name + " : #" + this.id + ", " + this.type + ", " + this.power + ", " + this.duration + "ms");
+        return this.name + " : #" + this.id + ", " + this.type + ", " + this.power + ", " + this.duration + "ms";
     }
 }

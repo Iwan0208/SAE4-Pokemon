@@ -31,10 +31,10 @@ class Pokemon {
     }
 
     toString() {
-        console.log(this.pokemon_name + " : #" + this.pokemon_id + ", [" + this.pokemon_types.map(type => type.name).join(", ") + "], " +
+        return this.pokemon_name + " : #" + this.pokemon_id + ", [" + this.pokemon_types.map(type => type.name).join(", ") + "], " +
             "[STA: " + this.base_stamina + ", ATK: " + this.base_attack + ", DEF: " + this.base_defense + "], " + 
             "Rapides = [" + this.charged_moves.map(move => move.name).join(", ") + "], " +
-            "Chargées = [" + this.fast_moves.map(move => move.name).join(", ") + "]");
+            "Chargées = [" + this.fast_moves.map(move => move.name).join(", ") + "]";
     }
 
     getTypes() {

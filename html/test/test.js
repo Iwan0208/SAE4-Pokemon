@@ -2,38 +2,50 @@ Type.fill_types();
 Attack.fill_attacks();
 Pokemon.fill_pokemons();
 
-function display(pokemonList) {
-    console.log(`Liste des ${pokemonList.length} Pokémons :`);
+function display(list, name) {
+    console.log(`Liste des ${list.length} ${name} :`);
 
-    pokemonList.forEach(pokemon => {
-        console.log(`- ${pokemon.toString()}`);
+    list.forEach(elt => {
+        console.log(`- ${elt.toString()}`);
     });
-
 }
 
 
 function getPokemonsByType(typeName) {
-    let list = Pokemon.all_pokemons.filter(p => {
-        p.pokemon_types.some(t => {
-            t.name.toUpperCase() == typeName.toUpperCase();
-        })
-    });
+    list = [];
 
-    display(list);
+    for (id in Pokemon.all_pokemons) {
+        let p = Pokemon.all_pokemons[id];
+        
+        
+        if (p.pokemon_types.some(t => {
+            return t.name.toUpperCase() == typeName.toUpperCase()
+        })) {
+            list.push(p);
+        }
+    }
+
+    display(list, "Pokémons");
 }
 
-getPokemonsByType("Bug");
+//getPokemonsByType("Bug");
 
 
 function getAttacksByType(typeName) {
-    let list = Attack.all_attacks.filter(a => {
-        a.type.name = typeName
-    });
+    list = [];
 
-    display(list);
+    for (id in Attack.all_attacks) {
+        let a = Attack.all_attacks[id];
+        
+        if (a.type.name.toUpperCase() == typeName.toUpperCase()) {
+            list.push(a);
+        }
+    }
+
+    display(list, "attaques");
 }
 
-getAttacksByType("Fire");
+//getAttacksByType("Fire");
 
 
 function typeCompare(a, b) {
@@ -60,10 +72,13 @@ function typeCompare(a, b) {
 }
 
 function sortPokemonByTypeThenName() {
-    let list = Pokemon.all_pokemons.sort((a, b) => {
-        a.pokemon_name.localeCompare(b.pokemon_name) ||
-        typeCompare(a, b)
-    });
+    let pokemonList = Pokemon.all_pokemons;
 
-    display(list);
+    const list = Object.entries(pokemonList)
+        .sort(([,a],[,b]) => a.pokemon_name.localeCompare(b.pokemon_name) || typeCompare(a, b))
+        .map(e => e[1]);
+
+    display(list, "Pokémons");
 }
+
+sortPokemonByTypeThenName();
