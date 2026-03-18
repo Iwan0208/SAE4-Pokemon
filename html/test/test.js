@@ -95,7 +95,7 @@ function sortPokemonByTypeThenName() {
     let pokemonList = Pokemon.all_pokemons;
 
     const list = Object.entries(pokemonList)
-        .sort(([,a],[,b]) => a.pokemon_name.localeCompare(b.pokemon_name) || typeCompare(a, b))
+        .sort(([,a],[,b]) => typeCompare(a, b) || a.pokemon_name.localeCompare(b.pokemon_name))
         .map(e => e[1]);
 
     display(list, "Pokémons");
