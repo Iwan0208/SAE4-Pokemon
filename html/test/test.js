@@ -48,34 +48,20 @@ function getAttacksByType(typeName) {
 //getAttacksByType("Fire");
 
 
-function typeCompare(a, b) {
-    // Les Pokémons n'ayant qu'un type sont placés avant ceux ayant 2 types
-    if (a.pokemon_types.length < b.pokemon_types.length) {
-        return -1;
-    } else if (a.pokemon_types.length > b.pokemon_types.length) {
-        return 1;
-    }
-
+function compareType(a, b) {
     let i = 0;
 
-    while (i < a.pokemon_types.length) {
-        if (a.pokemon_types[i].localeCompare(b.pokemon_types[i]) < 0) {
-            return -1;
-        } else if (a.pokemon_types[i].localeCompare(b.pokemon_types[i]) > 0) {
-            return 1;
-        }
+    let typeA = a.pokemon_types.join("").toUpperCase();
+    let typeB = b.pokemon_types.join("").toUpperCase();
 
-        i++;
-    }
-
-    return 0;
+    return typeA.localeCompare(typeB);
 }
 
 function sortPokemonByTypeThenName() {
     let pokemonList = Pokemon.all_pokemons;
 
     const list = Object.entries(pokemonList)
-        .sort(([,a],[,b]) => a.pokemon_name.localeCompare(b.pokemon_name) || typeCompare(a, b))
+        .sort(([,a],[,b]) => compareType(a, b) || a.pokemon_name.localeCompare(b.pokemon_name))
         .map(e => e[1]);
 
     display(list, "Pokémons");
