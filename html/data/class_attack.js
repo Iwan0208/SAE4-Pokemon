@@ -12,6 +12,14 @@ class Attack {
         }
     }
 
+    static get_attack_by_name(attack_name) {
+        for (let attack_id in this.all_attacks) {
+            if (attack_name.toUpperCase() == this.all_attacks[attack_id].name.toUpperCase()) {
+                return this.all_attacks[attack_id];
+            }
+        }
+    }
+
     constructor(id, name, type, power, duration) {
         this.id = id;
         this.name = name;
@@ -24,5 +32,3 @@ class Attack {
         console.log(this.name + " : #" + this.id + ", " + this.type + ", " + this.power + ", " + this.duration + "ms");
     }
 }
-
-Attack.fill_attacks();
