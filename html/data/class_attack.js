@@ -4,11 +4,11 @@ class Attack {
 
     static fill_attacks() {
         for (let move of fast_moves) {
-            Attack.all_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], move["type"], move["power"], move["duration"])
+            Attack.all_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
         }
         
         for (let move of charged_moves) {
-            Attack.all_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], move["type"], move["power"], move["duration"])
+            Attack.all_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
         }
     }
 
