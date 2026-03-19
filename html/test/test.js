@@ -85,4 +85,13 @@ function sortPokemonByTypeThenName() {
     display(list, "Pokémons");
 }
 
-sortPokemonByTypeThenName();
+//sortPokemonByTypeThenName();
+
+function testGetBestFastAttacksForEnemy() {
+    let pokemon = Pokemon.all_pokemons[151];
+    let enemy = Pokemon.all_pokemons[1];
+
+    console.log(pokemon.getBestFastAttacksForEnemy(false, enemy.pokemon_name));
+}
+
+testGetBestFastAttacksForEnemy();

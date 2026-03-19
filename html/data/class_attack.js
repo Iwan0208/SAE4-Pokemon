@@ -43,6 +43,6 @@ class Attack {
     }
 
     toString() {
-        return this.name + " : #" + this.id + ", " + this.type + ", " + this.power + ", " + this.duration + "ms";
+        return this.name + " : #" + this.id + ", " + this.type.name + ", " + this.power + ", " + this.duration + "ms";
     }
 }

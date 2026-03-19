@@ -57,7 +57,7 @@ class Pokemon {
 
     static get_pokemon_by_name(pokemon_name) {
         for (let pokemon_id in this.all_pokemons) {
-            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_name].name.toUpperCase()) {
+            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_id].pokemon_name.toUpperCase()) {
                 return this.all_pokemons[pokemon_id];
             }
         }
@@ -78,34 +78,53 @@ class Pokemon {
         return this.charged_moves.concat(this.fast_moves);
     }
 
-    
-
     getBestFastAttacksForEnemy(print, pokemonName) {
-        let p = this.get_pokemon_by_name(pokemonName);
-        list = [];
+        let p = Pokemon.get_pokemon_by_name(pokemonName);
 
-        let damage = power * effectiveness * (this.base_attack / pokemonName.base_attack);
+        let attack_stats = {};
 
-        let list = this.fast_moves
-            .sort((a, b) => {
-                let damageA = a.power * a.type.effectiveness[p.pokemon_types.name] * (this.base_attack / p.base_attack);
-                let damageB = b.power * b.type.effectiveness[p.type.name] * (this.base_attack / p.base_attack);
-                if () {
+        let list = this.fast_moves.sort((a, b) => {
+            // Calcul des efficacités et dégâts
+            let efficaciteA = 1;
+            let efficaciteB = 1;
 
-                }
-            })
+            p.pokemon_types.forEach((t) => {
+                efficaciteA *= a.type.effectiveness[t.name];
+                efficaciteB *= b.type.effectiveness[t.name];
+            });
 
-        let bestAttack = 
-            .reduce();
+            let ptsA = a.power * efficaciteA * (this.base_attack / p.base_attack);
+            let ptsB = b.power * efficaciteB * (this.base_attack / p.base_attack);
+            
+            // Enregistrer les statistiques des attaques
+            attack_stats[a.id] = {};
+            attack_stats[a.id].pts = ptsA;
+            attack_stats[a.id].eff = efficaciteA;
+
+            attack_stats[b.id] = {};
+            attack_stats[b.id].pts = ptsB;
+            attack_stats[b.id].eff = efficaciteB;
+
+            // Tri décroissant
+            if (ptsA > ptsB) {
+                return -1;
+            } else if (ptsA < ptsB) {
+                return 1;
+            }
+            return 0;
+        });
+
+        let bestAttack = list.reduce((a, b) => attack_stats[a.id].pts > attack_stats[b.id].pts ? a : b);
         
         if (print) {
-            console.log(`Liste des ${list.length} ${name} :`);
+            console.log(`Liste des ${list.length} Attaques :`);
 
             list.forEach(elt => {
                 console.log(`- ${elt.toString()}`);
+                console.log(`Dégâts : ${attack_stats[elt.id]}`);
             });
         }
 
-        return 0;
+        return {atk: bestAttack, pts: attack_stats[bestAttack.id].pts, eff: attack_stats[bestAttack.id].eff};
     }
 }
