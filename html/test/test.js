@@ -93,7 +93,7 @@ function fastFight(pokemonNameA, pokemonNameB) {
     let pokemonB = Pokemon.getPokemonByName(pokemonNameB).copy();
     pokemonB.reste = pokemonB.base_stamina;
 
-    let deroulement = [["Tour", "Attaquant", "ATK", "Defenseur", "DEF", "Nom attaque", "Efficacité", "Dégâts", "Reste"]];
+    let deroulement = [["Tour", "Attaquant", "ATK", "Defenseur", "DEF", "Nom attaque", "Efficacité", "Dégâts", "PV restants"]];
 
     let attaquant = pokemonA;
     let defenseur = pokemonB;
@@ -103,7 +103,7 @@ function fastFight(pokemonNameA, pokemonNameB) {
         let attack = attaquant.getBestFastAttacksForEnemy(false, defenseur.pokemon_name);
         defenseur.reste = Math.max(defenseur.reste - attack.pts, 0);
 
-        let tour = [nbTour, attaquant.pokemon_name, attaquant.base_attack, defenseur.pokemon_name, defenseur.base_defense, attack.atk, attack.eff, attack.pts, defenseur.reste];
+        let tour = [nbTour, attaquant.pokemon_name, attaquant.base_attack, defenseur.pokemon_name, defenseur.base_defense, attack.atk.name, attack.eff, attack.pts, defenseur.reste];
         deroulement.push(tour);
 
         nbTour++;
