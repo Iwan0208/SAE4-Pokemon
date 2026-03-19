@@ -93,8 +93,8 @@ class Pokemon {
                 efficaciteB *= b.type.effectiveness[t.name];
             });
 
-            let ptsA = a.power * efficaciteA * (this.base_attack / p.base_attack);
-            let ptsB = b.power * efficaciteB * (this.base_attack / p.base_attack);
+            let ptsA = Math.round(a.power * efficaciteA * (this.base_attack / p.base_attack));
+            let ptsB = Math.round(b.power * efficaciteB * (this.base_attack / p.base_attack));
             
             // Enregistrer les statistiques des attaques
             attack_stats[a.id] = {};
