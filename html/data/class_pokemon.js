@@ -18,6 +18,32 @@ class Pokemon {
         }
     }
 
+    static getWeakestEnnemies(attackName) {
+        let attack = Attack.get_attack_by_name(attackName);
+
+        if (attack == undefined) return;
+
+        let liste = {};
+
+        for (let p_id in this.all_pokemons) {
+            let pokemon = this.all_pokemons[p_id];
+
+            let efficacite = 1;
+            for (let i of pokemon.pokemon_types) {
+                efficacite *= attack.type.effectiveness[i.name];
+            }
+
+            if (liste.hasOwnProperty(efficacite)) {
+                liste[efficacite].push(pokemon);
+            } else {
+                liste[efficacite] = [pokemon];
+            }
+        }
+
+        let maxValue = Math.max(...Object.keys(liste));
+        display(liste[maxValue], "Pokémons sur lesquels " + attack.name + " est la plus puissante");
+    }
+
     constructor(pokemon_id, pokemon_name, base_stamina, base_attack, base_defense, pokemon_types, fast_moves, charged_moves) {
         this.pokemon_id = pokemon_id;
         this.pokemon_name = pokemon_name;
