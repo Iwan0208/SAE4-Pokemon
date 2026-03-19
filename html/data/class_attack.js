@@ -1,15 +1,14 @@
 class Attack {
     
-    static charged_attacks = {};
-    static fast_attacks = {};
+    static all_attacks = {};
 
     static fill_attacks() {
         for (let move of fast_moves) {
-            Attack.charged_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
+            Attack.all_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
         }
         
         for (let move of charged_moves) {
-            Attack.fast_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
+            Attack.all_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
         }
     }
 
@@ -19,19 +18,6 @@ class Attack {
                 return this.all_attacks[attack_id];
             }
         }
-    }
-
-    static get all_attacks() {
-        let liste = {};
-        
-        for (let a in this.charged_attacks) {
-            liste[a] = this.charged_attacks[a];
-        }
-        for (let a in this.fast_attacks) {
-            liste[a] = this.fast_attacks[a];
-        }
-
-        return liste;
     }
 
     constructor(id, name, type, power, duration) {
