@@ -85,15 +85,13 @@ function sortPokemonByTypeThenName() {
     display(list, "Pokémons");
 }
 
-sortPokemonByTypeThenName();
 
+function fastFight(pokemonNameA, pokemonNameB) {
+    let pokemonA = Pokemon.getPokemonByName(pokemonNameA).copy();
+    pokemonA.reste = pokemonA.base_stamina;
 
-function fastFigth(pokemonNameA, pokemonNameB) {
-    let pokemonA = Pokemon.getPokemonByName(pokemonNameA);
-    pokemonA["reste"] = pokemonA.base_stamina;
-
-    let pokemonB = Pokemon.getPokemonByName(pokemonNameB);
-    pokemonB["reste"] = pokemonB.base_stamina;
+    let pokemonB = Pokemon.getPokemonByName(pokemonNameB).copy();
+    pokemonB.reste = pokemonB.base_stamina;
 
     let deroulement = [["Tour", "Attaquant", "ATK", "Defenseur", "DEF", "Nom attaque", "Efficacité", "Dégâts", "Reste"]];
 
@@ -101,11 +99,11 @@ function fastFigth(pokemonNameA, pokemonNameB) {
     let defenseur = pokemonB;
 
     let nbTour = 1;
-    while (resteA > 0 || resteB > 0) {
-        let attack = attaquant.getBestFastAttacksForEnnemies(false, defenseur.pokemon_name);
+    while (pokemonA.reste > 0 && pokemonB.reste > 0) {
+        let attack = attaquant.getBestFastAttacksForEnemy(false, defenseur.pokemon_name);
         defenseur.reste = Math.max(defenseur.reste - attack.pts, 0);
 
-        let tour = [nbTour, attaquant.pokemon_name, attaquant.base_atk, defenseur.pokemon_name, defenseur.base_def, attack.atk, attack.eff, attack.pts, defenseur.reste];
+        let tour = [nbTour, attaquant.pokemon_name, attaquant.base_attack, defenseur.pokemon_name, defenseur.base_defense, attack.atk, attack.eff, attack.pts, defenseur.reste];
         deroulement.push(tour);
 
         nbTour++;
