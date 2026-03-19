@@ -45,7 +45,7 @@ function getPokemonsByAttack(attackName) {
         }
     }
 
-    return listePokemons;
+    display(listePokemons);
 }
 
 //getPokemonsByType("Bug");
