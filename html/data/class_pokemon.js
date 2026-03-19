@@ -53,7 +53,14 @@ class Pokemon {
         this.pokemon_types = pokemon_types;
         this.fast_moves = fast_moves;
         this.charged_moves = charged_moves;
-        
+    }
+
+    static get_pokemon_by_name(pokemon_name) {
+        for (let pokemon_id in this.all_pokemons) {
+            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_name].name.toUpperCase()) {
+                return this.all_pokemons[pokemon_id];
+            }
+        }
     }
 
     toString() {
@@ -69,5 +76,36 @@ class Pokemon {
 
     getMoves() {
         return this.charged_moves.concat(this.fast_moves);
+    }
+
+    
+
+    getBestFastAttacksForEnemy(print, pokemonName) {
+        let p = this.get_pokemon_by_name(pokemonName);
+        list = [];
+
+        let damage = power * effectiveness * (this.base_attack / pokemonName.base_attack);
+
+        let list = this.fast_moves
+            .sort((a, b) => {
+                let damageA = a.power * a.type.effectiveness[p.pokemon_types.name] * (this.base_attack / p.base_attack);
+                let damageB = b.power * b.type.effectiveness[p.type.name] * (this.base_attack / p.base_attack);
+                if () {
+
+                }
+            })
+
+        let bestAttack = 
+            .reduce();
+        
+        if (print) {
+            console.log(`Liste des ${list.length} ${name} :`);
+
+            list.forEach(elt => {
+                console.log(`- ${elt.toString()}`);
+            });
+        }
+
+        return 0;
     }
 }

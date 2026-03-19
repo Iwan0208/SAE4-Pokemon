@@ -69,10 +69,8 @@ function getAttacksByType(typeName) {
 
 
 function compareType(a, b) {
-    let i = 0;
-
-    let typeA = a.pokemon_types.join("").toUpperCase();
-    let typeB = b.pokemon_types.join("").toUpperCase();
+    typeA = a.pokemon_types.sort().join("").toUpperCase();
+    typeB = b.pokemon_types.sort().join("").toUpperCase();
 
     return typeA.localeCompare(typeB);
 }
