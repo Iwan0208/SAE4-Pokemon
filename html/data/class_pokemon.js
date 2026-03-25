@@ -75,6 +75,7 @@ class Pokemon {
         return this.pokemon_types;
     }
 
+    // Toutes les attaques chargées et rapides
     getMoves() {
         return this.charged_moves.concat(this.fast_moves);
     }
