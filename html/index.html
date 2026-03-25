@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Pokémons</title>
+    
+    <script src="data/type_effectiveness.js"></script>
+    <script src="data/charged_moves.js"></script>
+    <script src="data/fast_moves.js"></script>
+    <script src="data/pokemons.js"></script>
+    <script src="data/pokemon_moves.js"></script>
+    <script src="data/pokemon_types.js"></script>
+    
+    <script src="data/class_type.js"></script>
+    <script src="data/class_attack.js"></script>
+    <script src="data/class_pokemon.js"></script>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Type(s)</th>
+            <th>Endurance</th>
+            <th>Attaque</th>
+            <th>Défense</th>
+            <th>Image</th>
+        </thead>
+
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+
+<script defer>
+    let tbody = document.getElementsByTagName("tbody")[0];
+
+    Type.fill_types();
+    Attack.fill_attacks();
+    Pokemon.fill_pokemons();
+
+    for (let p_id in Pokemon.all_pokemons) {
+        let p = Pokemon.all_pokemons[p_id];
+
+        let ligne = document.createElement('tr');
+
+        let col = document.createElement("td");
+        col.textContent = p.pokemon_id;
+        ligne.appendChild(col);
+
+        col = document.createElement("td");
+        col.textContent = p.pokemon_name;
+        ligne.appendChild(col);
+
+        col = document.createElement("td");
+        col.textContent = p.pokemon_types.map((t) => t.name).join(", ");
+        ligne.appendChild(col);
+
+        col = document.createElement("td");
+        col.textContent = p.base_stamina;
+        ligne.appendChild(col);
+
+        col = document.createElement("td");
+        col.textContent = p.base_attack;
+        ligne.appendChild(col);
+
+        col = document.createElement("td");
+        col.textContent = p.base_defense;
+        ligne.appendChild(col);
+
+        col = document.createElement("td");
+        let img = document.createElement('img');
+
+        let fileName = "webp/sprites/" + p.pokemon_id.toString().padStart(3, "0") + "MS.webp";
+
+        let imgI = new Image();
+        imgI.src = fileName;
+
+        fileName = "webp/sprite-none.webp";
+        
+        col.appendChild(imgI);
+        ligne.appendChild(col);
+
+        tbody.appendChild(ligne);
+    }
+</script>
+</html>
