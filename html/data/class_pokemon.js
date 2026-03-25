@@ -9,17 +9,17 @@ class Pokemon {
             types = types.map(type => Type.all_types[type]);
 
             let charged_moves = pokemon_moves.filter(objet => objet.pokemon_id == pokemon.pokemon_id && objet.form == "Normal")[0].charged_moves;
-            charged_moves = charged_moves.map(attack => Attack.get_attack_by_name(attack));
+            charged_moves = charged_moves.map(attack => Attack.getAttackByName(attack));
 
             let fast_moves = pokemon_moves.filter(objet => objet.pokemon_id == pokemon.pokemon_id && objet.form == "Normal")[0].fast_moves;
-            fast_moves = fast_moves.map(attack => Attack.get_attack_by_name(attack));
+            fast_moves = fast_moves.map(attack => Attack.getAttackByName(attack));
 
             this.all_pokemons[pokemon.pokemon_id] = new this(pokemon.pokemon_id, pokemon.pokemon_name, pokemon.base_stamina, pokemon.base_attack, pokemon.base_defense, types, fast_moves, charged_moves);
         }
     }
 
     static getWeakestEnnemies(attackName) {
-        let attack = Attack.get_attack_by_name(attackName);
+        let attack = Attack.getAttackByName(attackName);
 
         if (attack == undefined) return;
 
@@ -28,21 +28,20 @@ class Pokemon {
         for (let p_id in this.all_pokemons) {
             let pokemon = this.all_pokemons[p_id];
 
-            let efficacite = 1;
-            for (let i of pokemon.pokemon_types) {
-                efficacite *= attack.type.effectiveness[i.name];
-            }
+            let effectiveness = pokemon.getEffectiveness(attackName);
 
-            if (liste.hasOwnProperty(efficacite)) {
-                liste[efficacite].push(pokemon);
+            if (liste.hasOwnProperty(effectiveness)) {
+                liste[effectiveness].push(pokemon);
             } else {
-                liste[efficacite] = [pokemon];
+                liste[effectiveness] = [pokemon];
             }
         }
 
         let maxValue = Math.max(...Object.keys(liste));
         display(liste[maxValue], "Pokémons sur lesquels " + attack.name + " est la plus puissante");
     }
+
+    
 
     constructor(pokemon_id, pokemon_name, base_stamina, base_attack, base_defense, pokemon_types, fast_moves, charged_moves) {
         this.pokemon_id = pokemon_id;
@@ -80,50 +79,85 @@ class Pokemon {
         return this.charged_moves.concat(this.fast_moves);
     }
 
+    // Retourne l'efficacité d'une attaque sur soi-même
+    getEffectiveness(attackName) {
+        let effectiveness = 1;
+
+        let a = Attack.getAttackByName(attackName);
+        if (a == undefined) return;
+
+        this.pokemon_types.forEach((t) => {
+            effectiveness *= a.type.effectiveness[t.name];
+        }); 
+
+        return effectiveness;
+    }
+
+    // Retourne le nombre de points de dégâts d'une attaque vers un autre Pokémon
+    getPoints(attackName, pokemonName) {
+        let a = Attack.getAttackByName(attackName);
+        if (a == undefined) return;
+
+        let p = Pokemon.getPokemonByName(pokemonName);
+        if (p == undefined) return;
+
+        return Math.ceil(a.power * this.getEffectiveness(a.name) * (this.base_attack / p.base_defense));
+    }
+
     getBestFastAttacksForEnemy(print, pokemonName) {
         let p = Pokemon.getPokemonByName(pokemonName);
 
+        if (p == undefined) return;
+        if (p.fast_moves == []) return;
+
+        // Créer et initialiser un objet contenant l'efficacité et les points de dégâts des attaques
+        let first_attack = this.fast_moves[0];
+        let attacks = [this.fast_moves[0]];
+
         let attack_stats = {};
+        attack_stats[first_attack.id] = {};
+        attack_stats[first_attack.id].pts = this.getPoints(first_attack.name, p.pokemon_name);
+        attack_stats[first_attack.id].eff = p.getEffectiveness(first_attack.name);
 
-        let bestAttack = this.fast_moves.reduce((a, b) => {
-            let efficaciteA = 1;
-            let efficaciteB = 1;
+        // On récupère l'attaque faisant le plus de dégâts à cet adversaire
+        attacks = this.fast_moves.sort((a, b) => {
+            // Calcul des points de dégâts infligés par les attaques
+            let ptsA = this.getPoints(a.name, p.pokemon_name);
+            let ptsB = this.getPoints(b.name, p.pokemon_name);
+            
+            // Enregistrer les informations sur chaque attaque pour les afficher plus tard
+            attack_stats[a.id] = {};
+            attack_stats[a.id].pts = ptsA;
+            attack_stats[a.id].eff = p.getEffectiveness(a.name);
 
-            p.pokemon_types.forEach((t) => {
-                efficaciteA *= a.type.effectiveness[t.name];
-                efficaciteB *= b.type.effectiveness[t.name];
-            });
+            attack_stats[b.id] = {};
+            attack_stats[b.id].pts = ptsB;
+            attack_stats[b.id].eff = p.getEffectiveness(b.name);
 
-            let ptsA = Math.round(a.power * efficaciteA * (this.base_attack / p.base_attack));
-            let ptsB = Math.round(b.power * efficaciteB * (this.base_attack / p.base_attack));
-
-            // Tri décroissant
+            // Retourne l'attaque la plus puissante (si égalité, la première par ordre alphabétique croissant)
             if (ptsA > ptsB) {
-                return a;
+                return -1;
+            } else if (ptsA < ptsB) {
+                return 1;
             } else {
-                return b;
+                return a.name < b.name ? -1 : 1;
             }
         });
 
-        let eff = 1;
-        for (let i of p.pokemon_types) {
-            eff *= bestAttack.type.effectiveness[i.name];
-        }
+        // Après avoir trouvé la meilleure attaque, on recalcule ses points de dégâts
+        let best_attack = attacks[0];
         
-        let pts = Math.round(bestAttack.power * eff * (this.base_attack / p.base_defense));
-        
+        // Affichage
         if (print) {
-            console.log(`Liste des ${list.length} Attaques :`);
+            console.log(`Liste des ${attacks.length} Attaques :`);
 
-            list.forEach(elt => {
+            attacks.forEach(elt => {
                 console.log(`- ${elt.toString()}`);
-                console.log(`Dégâts : ${attack_stats[elt.id]}`);
+                console.log(`Dégâts : ${attack_stats[elt.id].pts}`);
             });
         }
         
-
-
-        return {atk: bestAttack, pts: pts, eff: eff};
+        return {atk: best_attack, pts: attack_stats[best_attack.id].pts, eff: attack_stats[best_attack.id].eff};
     }
 
     copy() {
