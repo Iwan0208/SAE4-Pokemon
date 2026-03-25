@@ -17,7 +17,6 @@ function getPokemonsByType(typeName) {
     for (id in Pokemon.all_pokemons) {
         let p = Pokemon.all_pokemons[id];
         
-        
         if (p.pokemon_types.some(t => {
             return t.name.toUpperCase() == typeName.toUpperCase()
         })) {
@@ -87,6 +86,7 @@ function sortPokemonByTypeThenName() {
 
 
 function fastFight(pokemonNameA, pokemonNameB) {
+    // Initialisation des Pokémons
     let pokemonA = Pokemon.getPokemonByName(pokemonNameA);
     
     if (pokemonA == undefined) {
@@ -96,7 +96,6 @@ function fastFight(pokemonNameA, pokemonNameB) {
     
     pokemonA = pokemonA.copy();
     pokemonA.reste = pokemonA.base_stamina;
-
 
     let pokemonB = Pokemon.getPokemonByName(pokemonNameB);
     
@@ -114,10 +113,13 @@ function fastFight(pokemonNameA, pokemonNameB) {
     let defenseur = pokemonB;
 
     let nbTour = 1;
+
+    // Tant que les deux Pokémon ont des points de vie
     while (pokemonA.reste > 0 && pokemonB.reste > 0) {
         let attack = attaquant.getBestFastAttacksForEnemy(false, defenseur.pokemon_name);
         defenseur.reste = Math.max(defenseur.reste - attack.pts, 0);
 
+        // Ajout du tour au tableau
         let tour = [nbTour, attaquant.pokemon_name, attaquant.base_attack, defenseur.pokemon_name, defenseur.base_defense, attack.atk.name, attack.eff, attack.pts, defenseur.reste];
         deroulement.push(tour);
 

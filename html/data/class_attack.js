@@ -13,7 +13,7 @@ class Attack {
         }
     }
 
-    static get_attack_by_name(attack_name) {
+    static getAttackByName(attack_name) {
         for (let attack_id in this.all_attacks) {
             if (attack_name.toUpperCase() == this.all_attacks[attack_id].name.toUpperCase()) {
                 return this.all_attacks[attack_id];
