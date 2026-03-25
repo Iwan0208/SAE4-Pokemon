@@ -87,10 +87,25 @@ function sortPokemonByTypeThenName() {
 
 
 function fastFight(pokemonNameA, pokemonNameB) {
-    let pokemonA = Pokemon.getPokemonByName(pokemonNameA).copy();
+    let pokemonA = Pokemon.getPokemonByName(pokemonNameA);
+    
+    if (pokemonA == undefined) {
+        console.log("Aucun Pokémon du nom de '" + pokemonNameA + "' trouvé");
+        return;
+    }
+    
+    pokemonA = pokemonA.copy();
     pokemonA.reste = pokemonA.base_stamina;
 
-    let pokemonB = Pokemon.getPokemonByName(pokemonNameB).copy();
+
+    let pokemonB = Pokemon.getPokemonByName(pokemonNameB);
+    
+    if (pokemonB == undefined) {
+        console.log("Aucun Pokémon du nom de '" + pokemonNameB + "' trouvé");
+        return;
+    }
+    
+    pokemonB = pokemonB.copy();
     pokemonB.reste = pokemonB.base_stamina;
 
     let deroulement = [["Tour", "Attaquant", "ATK", "Defenseur", "DEF", "Nom attaque", "Efficacité", "Dégâts", "PV restants"]];

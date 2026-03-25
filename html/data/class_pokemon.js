@@ -61,13 +61,15 @@ class Pokemon {
                 return this.all_pokemons[pokemon_id];
             }
         }
+
+        return undefined;
     }
 
     toString() {
         return this.pokemon_name + " : #" + this.pokemon_id + ", [" + this.pokemon_types.map(type => type.name).join(", ") + "], " +
             "[STA: " + this.base_stamina + ", ATK: " + this.base_attack + ", DEF: " + this.base_defense + "], " + 
-            "Rapides = [" + this.charged_moves.map(move => move.name).join(", ") + "], " +
-            "Chargées = [" + this.fast_moves.map(move => move.name).join(", ") + "]";
+            "Rapides = [" + this.fast_moves.map(move => move.name).join(", ") + "], " +
+            "Chargées = [" + this.charged_moves.map(move => move.name).join(", ") + "]";
     }
 
     getTypes() {
@@ -83,8 +85,7 @@ class Pokemon {
 
         let attack_stats = {};
 
-        let list = this.fast_moves.sort((a, b) => {
-            // Calcul des efficacités et dégâts
+        let bestAttack = this.fast_moves.reduce((a, b) => {
             let efficaciteA = 1;
             let efficaciteB = 1;
 
@@ -95,26 +96,21 @@ class Pokemon {
 
             let ptsA = Math.round(a.power * efficaciteA * (this.base_attack / p.base_attack));
             let ptsB = Math.round(b.power * efficaciteB * (this.base_attack / p.base_attack));
-            
-            // Enregistrer les statistiques des attaques
-            attack_stats[a.id] = {};
-            attack_stats[a.id].pts = ptsA;
-            attack_stats[a.id].eff = efficaciteA;
-
-            attack_stats[b.id] = {};
-            attack_stats[b.id].pts = ptsB;
-            attack_stats[b.id].eff = efficaciteB;
 
             // Tri décroissant
             if (ptsA > ptsB) {
-                return -1;
-            } else if (ptsA < ptsB) {
-                return 1;
+                return a;
+            } else {
+                return b;
             }
-            return 0;
         });
 
-        let bestAttack = list.reduce((a, b) => attack_stats[a.id].pts > attack_stats[b.id].pts ? a : b);
+        let eff = 1;
+        for (let i of p.pokemon_types) {
+            eff *= bestAttack.type.effectiveness[i.name];
+        }
+        
+        let pts = Math.round(bestAttack.power * eff * (this.base_attack / p.base_defense));
         
         if (print) {
             console.log(`Liste des ${list.length} Attaques :`);
@@ -124,8 +120,10 @@ class Pokemon {
                 console.log(`Dégâts : ${attack_stats[elt.id]}`);
             });
         }
+        
 
-        return {atk: bestAttack, pts: attack_stats[bestAttack.id].pts, eff: attack_stats[bestAttack.id].eff};
+
+        return {atk: bestAttack, pts: pts, eff: eff};
     }
 
     copy() {
