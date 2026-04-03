@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Pokémons</title>
+    <link rel="stylesheet" href="style.css">
     
     <script src="data/type_effectiveness.js"></script>
     <script src="data/charged_moves.js"></script>
@@ -17,21 +18,26 @@
     <script src="data/class_pokemon.js"></script>
 </head>
 <body>
-    <table>
-        <thead>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Type(s)</th>
-            <th>Endurance</th>
-            <th>Attaque</th>
-            <th>Défense</th>
-            <th>Image</th>
-        </thead>
+    <div class="tablecontainer">
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Type(s)</th>
+                <th>Image</th>
+                <th>Endurance</th>
+                <th>Attaque</th>
+                <th>Défense</th>
+            </thead>
 
-        <tbody>
+            <tbody>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="details" style="display: none">
+    </div>
 </body>
 
 <script src="js/script.js" defer></script>

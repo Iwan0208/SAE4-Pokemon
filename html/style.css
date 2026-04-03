@@ -1,0 +1,41 @@
+
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid black;
+
+    padding: 0.5em;
+}
+
+tr:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+th:hover {
+    cursor: default;
+}
+
+.number, .sprite {
+    text-align: center;
+}
+
+.sprite img {
+    width: 48px;
+}
+
+.tablecontainer {
+    overflow-x: auto;
+}
+
+#details {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: whitesmoke;
+    border: 1px solid black;
+}
