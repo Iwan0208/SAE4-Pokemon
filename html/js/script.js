@@ -2,18 +2,24 @@ Type.fill_types();
 Attack.fill_attacks();
 Pokemon.fill_pokemons();
 
-console.log(Pokemon.all_pokemons);
-
 const tbody = document.getElementsByTagName("tbody")[0];
 
+// Variables pour la pagination
 const prev = document.getElementById("prev");
 const next = document.getElementById("next");
 const pageSpan = document.getElementById("page");
 
 const PAGE_LIMIT = 25;
+const PAGE_COUNT = Math.ceil((Object.keys(Pokemon.all_pokemons).length - 1) / PAGE_LIMIT);
 let currentPage = 1;
 
-// Remplissage du tableau des Pokémons
+// Variables pour le filtrage
+const type = document.getElementById("type");
+const fastAttack = document.getElementById("fast_attack");
+const nom = document.getElementById("nom");
+
+// REMPLISSAGE DU TABLEAU
+
 for (let p_id in Pokemon.all_pokemons) {
     let p = Pokemon.all_pokemons[p_id];
 
@@ -57,19 +63,26 @@ for (let p_id in Pokemon.all_pokemons) {
     tbody.appendChild(ligne);
 }
 
-const PAGE_COUNT = Math.ceil((tbody.rows.length - 1) / PAGE_LIMIT);
+function hideRows() {
+    [...tbody.rows].forEach((tr) => {
+        tr.style.display = 'none';
+    });
+}
+
+
+// PAGINATION
 
 function prevPage() {
     currentPage--;
-    updateTable(currentPage);
+    updatePage(currentPage);
 }
 
 function nextPage() {
     currentPage++;
-    updateTable(currentPage);
+    updatePage(currentPage);
 }
 
-function updateTable(page) {
+function updatePage(page) {
     // S'assurer que le numéro de page est valide
     if (page < 1) page = 1;
     if (page > PAGE_COUNT) page = PAGE_COUNT;
@@ -82,9 +95,7 @@ function updateTable(page) {
     next.disabled = page == PAGE_COUNT;
 
     // Cacher toutes les lignes
-    [...tbody.rows].forEach((tr) => {
-        tr.style.display = 'none';
-    });
+    hideRows();
 
     // N'afficher que les bonnes lignes
     for (let i = (page - 1) * PAGE_LIMIT; i < page * PAGE_LIMIT; i++) {
@@ -94,6 +105,70 @@ function updateTable(page) {
     }
 }
 
+// Commencer à la première page
 window.onload = function() {
-    updateTable(currentPage); 
+    updatePage(currentPage); 
 }
+
+
+// FILTRAGE
+
+// Options par défaut (pas de filtre)
+let optType = document.createElement("option");
+optType.value = "";
+optType.textContent = "Sélectionnez un type";
+
+type.appendChild(optType);
+
+for (let type_name in Type.all_types) {
+    let opt = document.createElement("option");
+    opt.value = type_name;
+    opt.textContent = type_name;
+    
+    type.appendChild(opt);
+}
+
+
+let optAttack = document.createElement("option");
+optAttack.value = "";
+optAttack.textContent = "Sélectionnez une attaque";
+
+fastAttack.appendChild(optAttack);
+
+// Remplissage dynamique des options
+for (let a_id in Attack.fast_attacks) {
+    let opt = document.createElement("option");
+    opt.value = a_id;
+    opt.textContent = Attack.fast_attacks[a_id].name;
+
+    fastAttack.appendChild(opt);
+}
+
+
+
+function filterByType(typeName) {
+    let pokemons = Pokemon.getPokemonsByType(typeName);
+
+    hideRows();
+
+}
+
+function filterByName(name) {
+    console.log(name.toUpperCase());
+}
+
+function filterByFastAttack(fastAttack) {
+    console.log(Attack.fast_attacks[fastAttack]);
+}
+
+type.addEventListener("change", (e) => {
+    filterByType(e.target.value);
+});
+
+fastAttack.addEventListener("change", (e) => {
+    filterByFastAttack(e.target.value);
+});
+
+nom.addEventListener("input", (e) => {
+    filterByName(e.target.value);
+});

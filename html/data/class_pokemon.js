@@ -41,7 +41,22 @@ class Pokemon {
         display(liste[maxValue], "Pokémons sur lesquels " + attack.name + " est la plus puissante");
     }
 
-    
+    // Fonction utile pour le filtrage
+    static getPokemonsByType(typeName) {
+        pokemons = {};
+
+        for (id in this.all_pokemons) {
+            let p = this.all_pokemons[id];
+            
+            if (p.pokemon_types.some(t => {
+                return t.name.toUpperCase() == typeName.toUpperCase()
+            })) {
+                pokemons[id] = p;
+            }
+        }
+
+        return pokemons;
+    }
 
     constructor(pokemon_id, pokemon_name, base_stamina, base_attack, base_defense, pokemon_types, fast_moves, charged_moves) {
         this.pokemon_id = pokemon_id;
