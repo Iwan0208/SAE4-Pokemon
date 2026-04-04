@@ -41,23 +41,17 @@ class Pokemon {
         display(liste[maxValue], "Pokémons sur lesquels " + attack.name + " est la plus puissante");
     }
 
-    // Fonction utile pour le filtrage
-    static getPokemonsByType(typeName) {
-        pokemons = {};
-
-        for (id in this.all_pokemons) {
-            let p = this.all_pokemons[id];
-            
-            if (p.pokemon_types.some(t => {
-                return t.name.toUpperCase() == typeName.toUpperCase()
-            })) {
-                pokemons[id] = p;
+    // Renvoie un seul Pokémon si son nom correspond, sinon undefined
+    static getPokemonByName(pokemon_name) {
+        for (let pokemon_id in this.all_pokemons) {
+            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_id].pokemon_name.toUpperCase()) {
+                return this.all_pokemons[pokemon_id];
             }
         }
 
-        return pokemons;
+        return undefined;
     }
-
+    
     constructor(pokemon_id, pokemon_name, base_stamina, base_attack, base_defense, pokemon_types, fast_moves, charged_moves) {
         this.pokemon_id = pokemon_id;
         this.pokemon_name = pokemon_name;
@@ -69,15 +63,6 @@ class Pokemon {
         this.charged_moves = charged_moves;
     }
 
-    static getPokemonByName(pokemon_name) {
-        for (let pokemon_id in this.all_pokemons) {
-            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_id].pokemon_name.toUpperCase()) {
-                return this.all_pokemons[pokemon_id];
-            }
-        }
-
-        return undefined;
-    }
 
     toString() {
         return this.pokemon_name + " : #" + this.pokemon_id + ", [" + this.pokemon_types.map(type => type.name).join(", ") + "], " +

@@ -4,11 +4,11 @@ class Attack {
     static fast_attacks = {};
 
     static fill_attacks() {
-        for (let move of fast_moves) {
+        for (let move of charged_moves) {
             Attack.charged_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
         }
         
-        for (let move of charged_moves) {
+        for (let move of fast_moves) {
             Attack.fast_attacks[move["move_id"]] = new Attack(move["move_id"], move["name"], Type.all_types[move["type"]], move["power"], move["duration"])
         }
     }
@@ -19,6 +19,8 @@ class Attack {
                 return this.all_attacks[attack_id];
             }
         }
+
+        return undefined;
     }
 
     static get all_attacks() {

@@ -10,7 +10,7 @@ function display(list, name) {
     });
 }
 
-// Cette fonction de test a été rajoutée à la classe Pokémon en tant que méthode statique
+
 function getPokemonsByType(typeName) {
     list = [];
 
