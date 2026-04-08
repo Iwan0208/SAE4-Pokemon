@@ -6,7 +6,7 @@ class Pokemon {
             if (pokemon.form != "Normal") continue;
 
             let types = pokemon_types.filter(objet => objet.pokemon_id == pokemon.pokemon_id && objet.form == "Normal")[0].type;
-            types = types.map(type => Type.all_types[type]);
+            types = types.map(type => Type.all_types[type]).sort();
 
             let charged_moves = pokemon_moves.filter(objet => objet.pokemon_id == pokemon.pokemon_id && objet.form == "Normal")[0].charged_moves;
             charged_moves = charged_moves.map(attack => Attack.getAttackByName(attack));
@@ -41,8 +41,17 @@ class Pokemon {
         display(liste[maxValue], "Pokémons sur lesquels " + attack.name + " est la plus puissante");
     }
 
-    
+    // Renvoie un seul Pokémon si son nom correspond, sinon undefined
+    static getPokemonByName(pokemon_name) {
+        for (let pokemon_id in this.all_pokemons) {
+            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_id].pokemon_name.toUpperCase()) {
+                return this.all_pokemons[pokemon_id];
+            }
+        }
 
+        return undefined;
+    }
+    
     constructor(pokemon_id, pokemon_name, base_stamina, base_attack, base_defense, pokemon_types, fast_moves, charged_moves) {
         this.pokemon_id = pokemon_id;
         this.pokemon_name = pokemon_name;
@@ -54,15 +63,6 @@ class Pokemon {
         this.charged_moves = charged_moves;
     }
 
-    static getPokemonByName(pokemon_name) {
-        for (let pokemon_id in this.all_pokemons) {
-            if (pokemon_name.toUpperCase() == this.all_pokemons[pokemon_id].pokemon_name.toUpperCase()) {
-                return this.all_pokemons[pokemon_id];
-            }
-        }
-
-        return undefined;
-    }
 
     toString() {
         return this.pokemon_name + " : #" + this.pokemon_id + ", [" + this.pokemon_types.map(type => type.name).join(", ") + "], " +

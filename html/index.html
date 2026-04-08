@@ -18,25 +18,36 @@
     <script src="data/class_pokemon.js"></script>
 </head>
 <body>
+    <div id="filters_fields">
+        <select id="type"></select>
+        <select id="fast_attack"></select>
+        <input id="nom" type="text">
+    </div>
+
     <div class="tablecontainer">
         <table>
             <thead>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Type(s)</th>
+                <th data-field="id">ID</th>
+                <th data-field="name">Nom</th>
+                <th data-field="type">Type(s)</th>
+                <th data-field="stamina">Endurance</th>
+                <th data-field="attack">Attaque</th>
+                <th data-field="defense">Défense</th>
                 <th>Image</th>
-                <th>Endurance</th>
-                <th>Attaque</th>
-                <th>Défense</th>
             </thead>
 
             <tbody>
-
+                <!-- Rempli dynamiquement -->
             </tbody>
         </table>
     </div>
 
     <div id="details" style="display: none">
+
+    <div>
+        <button id="prev" onclick="prevPage()">PRÉC</button>
+        <button id="next" onclick="nextPage()">SUIV</button>
+        <span id="page"></span>
     </div>
 </body>
 
