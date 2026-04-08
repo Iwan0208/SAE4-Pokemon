@@ -49,6 +49,7 @@ function fillTable(pokemonList) {
 
         let col = document.createElement("td");
         col.textContent = p.pokemon_id;
+        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
@@ -61,14 +62,17 @@ function fillTable(pokemonList) {
 
         col = document.createElement("td");
         col.textContent = p.base_stamina;
+        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
         col.textContent = p.base_attack;
+        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
         col.textContent = p.base_defense;
+        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
