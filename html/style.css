@@ -1,5 +1,3 @@
-
-
 table {
     border-collapse: collapse;
 }
@@ -25,6 +23,7 @@ th:hover {
 
 .sprite img {
     width: 48px;
+    height: 48px;
 }
 
 .tablecontainer {
@@ -32,10 +31,22 @@ th:hover {
 }
 
 #details {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+    top: 20%;
+    left: 40%;
 
     background-color: whitesmoke;
     border: 1px solid black;
+
+    padding: 2.5em;
+
+    >div {
+        display:flex;
+        justify-content: space-between;
+        margin: 1em 0;
+
+        h1 {
+            margin: 0;
+        }
+    }
 }

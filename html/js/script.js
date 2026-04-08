@@ -47,6 +47,30 @@ for (let p_id in Pokemon.all_pokemons) {
     
     col.appendChild(img);
     col.classList.add("sprite");
+
+    img.addEventListener("mouseover", (event) => {
+        let img = event.currentTarget;
+        
+        let fenetre = document.createElement("div");
+        fenetre.setAttribute("id", "details");
+
+        let boutonFermer = document.createElement("button");
+        boutonFermer.setAttribute("onclick", "fermerDetails()");
+        boutonFermer.textContent = "X";
+        fenetre.appendChild(boutonFermer);
+        
+        let fileName = img.getAttribute("src");
+    
+        let imgBalise = document.createElement("img");
+        imgBalise.setAttribute("src", fileName);
+        imgBalise.setAttribute("onerror", "this.src='webp/image-none.webp'");
+
+        fenetre.appendChild(imgBalise);
+        
+        document.getElementById("details").replaceWith(fenetre);
+
+    })
+
     ligne.appendChild(col);
 
     ligne.setAttribute("id", p.pokemon_id);
@@ -65,8 +89,27 @@ for (let p_id in Pokemon.all_pokemons) {
         boutonFermer.textContent = "X";
         fenetre.appendChild(boutonFermer);
 
-        let titre = document.createElement("h1");
-        titre.textContent = "Liste des attaques rapides";
+        
+        let div = document.createElement("div");
+
+        let nomPokemon = document.createElement("h1");
+        nomPokemon.textContent = p.pokemon_name;
+
+        div.appendChild(nomPokemon);
+        
+        let fileName = "webp/images/" + p.pokemon_id.toString().padStart(3, "0") + ".webp";
+    
+        let img = document.createElement("img");
+        img.setAttribute("src", fileName);
+        img.setAttribute("onerror", "this.src='webp/image-none.webp'");
+
+        div.appendChild(img);
+        div.classList.add("sprite");
+
+        fenetre.appendChild(div);
+
+        let titre = document.createElement("h2");
+        titre.textContent = "Attaques rapides";
         fenetre.appendChild(titre);
 
         let list = document.createElement("ul");
@@ -78,10 +121,9 @@ for (let p_id in Pokemon.all_pokemons) {
         }
 
         fenetre.appendChild(list);
-        
 
-        titre = document.createElement("h1");
-        titre.textContent = "Liste des attaques rapides";
+        titre = document.createElement("h2");
+        titre.textContent = "Attaques chargées";
         fenetre.appendChild(titre);
 
         list = document.createElement("ul");
