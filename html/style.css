@@ -31,22 +31,33 @@ th:hover {
 }
 
 #details {
+
     position: fixed;
     top: 20%;
     left: 40%;
 
-    background-color: whitesmoke;
-    border: 1px solid black;
+    /* background-color: whitesmoke;
+    border: 1px solid black; */
 
-    padding: 2.5em;
+
+    display: flex;
 
     >div {
-        display:flex;
-        justify-content: space-between;
-        margin: 1em 0;
 
-        h1 {
-            margin: 0;
+        >div {
+            display:flex;
+            justify-content: space-between;
+            margin: 1em 0;
+
+            h1 {
+                margin: 0;
+            }
+
         }
     }
+}
+
+#infos {
+    background-color: whitesmoke;
+    padding: 2.5em;
 }

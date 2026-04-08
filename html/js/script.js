@@ -35,8 +35,8 @@ const sortFields = document.getElementsByTagName("th");
 
 // REMPLISSAGE DU TABLEAU
 
-function fermerDetails() {
-    document.getElementById("details").style.display = "none";
+function fermerDetails(partie) {
+    document.getElementById(partie).style.display = "none";
 }
 
 function fillTable(pokemonList) {
@@ -87,12 +87,7 @@ function fillTable(pokemonList) {
             let img = event.currentTarget;
             
             let fenetre = document.createElement("div");
-            fenetre.setAttribute("id", "details");
-
-            let boutonFermer = document.createElement("button");
-            boutonFermer.setAttribute("onclick", "fermerDetails()");
-            boutonFermer.textContent = "X";
-            fenetre.appendChild(boutonFermer);
+            fenetre.setAttribute("id", "image-zoom");
             
             let fileName = img.getAttribute("src");
         
@@ -102,13 +97,13 @@ function fillTable(pokemonList) {
 
             fenetre.appendChild(imgBalise);
             
-            document.getElementById("details").replaceWith(fenetre);
+            document.getElementById("image-zoom").replaceWith(fenetre);
 
         })
 
 
         img.addEventListener("mouseleave", (event) => {
-            fermerDetails();
+            fermerDetails("image-zoom");
         })
 
         ligne.appendChild(col);
@@ -123,10 +118,10 @@ function fillTable(pokemonList) {
             let pokemon = Pokemon.all_pokemons[pokemonId];
 
             let fenetre = document.createElement("div");
-            fenetre.setAttribute("id", "details");
+            fenetre.setAttribute("id", "infos");
 
             let boutonFermer = document.createElement("button");
-            boutonFermer.setAttribute("onclick", "fermerDetails()");
+            boutonFermer.setAttribute("onclick", "fermerDetails('infos')");
             boutonFermer.textContent = "X";
             fenetre.appendChild(boutonFermer);
 
@@ -171,7 +166,7 @@ function fillTable(pokemonList) {
             }
 
             fenetre.appendChild(list);
-            document.getElementById("details").replaceWith(fenetre);
+            document.getElementById("infos").replaceWith(fenetre);
 
         });
 
