@@ -106,6 +106,11 @@ function fillTable(pokemonList) {
 
         })
 
+
+        img.addEventListener("mouseleave", (event) => {
+            fermerDetails();
+        })
+
         ligne.appendChild(col);
 
         ligne.setAttribute("id", p.pokemon_id);
@@ -125,7 +130,20 @@ function fillTable(pokemonList) {
             boutonFermer.textContent = "X";
             fenetre.appendChild(boutonFermer);
 
-            let titre = document.createElement("h1");
+            let partieHaute = document.createElement('div');
+
+            let nomPokemon = document.createElement("h1");
+            nomPokemon.textContent = p.pokemon_name;
+            partieHaute.appendChild(nomPokemon);
+
+            let spritePokemon = document.createElement('img');
+            spritePokemon.src = ligne.lastElementChild.children[0].src;
+            partieHaute.appendChild(spritePokemon);
+
+            partieHaute.classList.add("sprite");
+            fenetre.appendChild(partieHaute);
+
+            let titre = document.createElement("h2");
             titre.textContent = "Liste des attaques rapides";
             fenetre.appendChild(titre);
 
@@ -140,8 +158,8 @@ function fillTable(pokemonList) {
             fenetre.appendChild(list);
             
 
-            titre = document.createElement("h1");
-            titre.textContent = "Liste des attaques rapides";
+            titre = document.createElement("h2");
+            titre.textContent = "Liste des attaques chargées";
             fenetre.appendChild(titre);
 
             list = document.createElement("ul");
