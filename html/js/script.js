@@ -81,6 +81,31 @@ function fillTable(pokemonList) {
         
         col.appendChild(img);
         col.classList.add("sprite");
+
+
+        img.addEventListener("mouseover", (event) => {
+            let img = event.currentTarget;
+            
+            let fenetre = document.createElement("div");
+            fenetre.setAttribute("id", "details");
+
+            let boutonFermer = document.createElement("button");
+            boutonFermer.setAttribute("onclick", "fermerDetails()");
+            boutonFermer.textContent = "X";
+            fenetre.appendChild(boutonFermer);
+            
+            let fileName = img.getAttribute("src");
+        
+            let imgBalise = document.createElement("img");
+            imgBalise.setAttribute("src", fileName);
+            imgBalise.setAttribute("onerror", "this.src='webp/image-none.webp'");
+
+            fenetre.appendChild(imgBalise);
+            
+            document.getElementById("details").replaceWith(fenetre);
+
+        })
+
         ligne.appendChild(col);
 
         ligne.setAttribute("id", p.pokemon_id);
