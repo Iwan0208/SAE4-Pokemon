@@ -17,24 +17,30 @@ let pageCount = Math.ceil((Object.keys(Pokemon.all_pokemons).length - 1) / PAGE_
 let filters = {
     name: "",
     type: "",
-    attack: -1
+    attack: ""
 };
+
+let sort = {
+    field: "",
+    order: 0
+}
 
 // Variables pour le filtrage
 const type = document.getElementById("type");
 const fastAttack = document.getElementById("fast_attack");
 const nom = document.getElementById("nom");
 
+// Variables pour le tri
+const sortFields = document.getElementsByTagName("th");
+
 // REMPLISSAGE DU TABLEAU
 
-function fillTable(pokemonList = Pokemon.all_pokemons) {
+function fillTable(pokemonList) {
     // Vider le tableau
     tbody.innerHTML = "";
 
     // Remplir le tableau
-    for (let p_id in pokemonList) {
-        let p = Pokemon.all_pokemons[p_id];
-
+    pokemonList.forEach(p => { 
         let ligne = document.createElement('tr');
 
         let col = document.createElement("td");
@@ -73,7 +79,7 @@ function fillTable(pokemonList = Pokemon.all_pokemons) {
         ligne.appendChild(col);
 
         tbody.appendChild(ligne);
-    }
+    });
 }
 
 
@@ -120,18 +126,14 @@ function updatePage() {
 }
 
 function updateTable() {
-    let pokemonList = Pokemon.all_pokemons;
+    let pokemons = Pokemon.all_pokemons;
+    let pokemonList = Object.values(Pokemon.all_pokemons);
     
-    // Appliquer les filtres potentiels
-    pokemonList = filterByType(pokemonList, filters.type);
-    console.log("Filtre type :", pokemonList);
-    pokemonList = filterByFastAttack(pokemonList, filters.attack);
-    console.log("Filtre attaque :", pokemonList);
-    pokemonList = filterByName(pokemonList, filters.name);
-    console.log("Filtre nom :", pokemonList);
+    pokemonList = applyFilters(pokemonList);
+    pokemonList = applySort(pokemonList);
     
     // Calculer le nombre de pages à afficher
-    pageCount = Math.ceil(Object.keys(pokemonList).length / PAGE_LIMIT);
+    pageCount = Math.ceil(pokemonList.length / PAGE_LIMIT);
 
     fillTable(pokemonList);
     updatePage();
@@ -176,63 +178,88 @@ for (let a_id in Attack.fast_attacks) {
     fastAttack.appendChild(opt);
 }
 
-function filterByType(pokemonList, typeName) {
-    let type = Type.all_types[typeName];
-    if (!type) return pokemonList;
+function applyFilters(pokemonList) {
+    return pokemonList
+        // Filtre par type
+        .filter(p => {
+            if (filters.type == "") return true;
+            
+            return p.pokemon_types.some(t =>
+                t.name.toUpperCase() == filters.type.toUpperCase()
+            )
+        })
 
-    let pokemons = {};
+        // Filtre par attaque
+        .filter(p => {
+            if (filters.attack == "") return true;
 
-    for (id in pokemonList) {
-        let p = pokemonList[id];
-        
-        if (p.pokemon_types.some(t => {
-            return t.name.toUpperCase() == typeName.toUpperCase()
-        })) {
-            pokemons[id] = p;
-        }
-    }
+            return p.fast_moves.some(a =>
+                a.name.toUpperCase() == Attack.all_attacks[filters.attack].name.toUpperCase()
+            )
+        })
 
-    return pokemons;
+        // Filtre par nom
+        .filter(p => {
+            if (filters.name.trim() == "") return true;
+
+            // Ignorer la casse et les accents
+            let input = filters.name.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+            
+            return p.pokemon_name.toUpperCase().includes(input);
+        });
 }
 
-function filterByName(pokemonList, name) {
-    if (name.trim() == "") return pokemonList;
+function applySort(pokemonList) {
+    if (sort.order == 0) return pokemonList;
 
-    let pokemons = {};
+    let sortedList = pokemonList;
 
-    for (id in pokemonList) {
-        let p = pokemonList[id];
+    switch (sort.field) {
+        case "id":
+            sortedList = sortedList.sort((a, b) =>
+                sort.order * (a.pokemon_id - b.pokemon_id) || a.pokemon_name.localeCompare(b.pokemon_name)
+            )
+            break;
         
-        if (p.pokemon_name.toUpperCase().includes(name.trim().toUpperCase())) {
-            pokemons[id] = p;
-        }
+        case "name":
+            sortedList = sortedList.sort((a, b) =>
+                sort.order * a.pokemon_name.localeCompare(b.pokemon_name)
+            )
+            break;
+        
+        case "type":
+            sortedList = sortedList.sort((a, b) =>
+                sort.order * a.pokemon_types.join("").localeCompare(b.pokemon_types.join("")) || a.pokemon_name.localeCompare(b.pokemon_name)
+            )
+            break;
+        
+        case "stamina":
+            sortedList = sortedList.sort((a, b) =>
+                sort.order * (a.base_stamina - b.base_stamina) || a.pokemon_name.localeCompare(b.pokemon_name)
+            )
+            break;
+        
+        case "attack":
+            sortedList = sortedList.sort((a, b) =>
+                sort.order * (a.base_attack - b.base_attack) || a.pokemon_name.localeCompare(b.pokemon_name)
+            )
+            break;
+        
+        case "defense":
+            sortedList = sortedList.sort((a, b) =>
+                sort.order * (a.base_defense - b.base_defense) || a.pokemon_name.localeCompare(b.pokemon_name)
+            )
+            break;
     }
 
-    return pokemons;
+    return sortedList;
 }
 
-function filterByFastAttack(pokemonList, fastAttack) {
-    let attack = Attack.fast_attacks[fastAttack];
-    if (!attack) return pokemonList;
-
-    let pokemons = {};
-
-    for (id in pokemonList) {
-        let p = pokemonList[id];
-        
-        if (p.fast_moves.some(a => {
-            return a.name.toUpperCase() == attack.name.toUpperCase()
-        })) {
-            pokemons[id] = p;
-        }
-    }
-
-    return pokemons;
-}
+// Boutons de filtre
 
 type.addEventListener("change", (e) => {
     filters.type = e.target.value;
-    currentPage = 1;
+    
     updateTable();
 });
 
@@ -247,3 +274,35 @@ nom.addEventListener("input", (e) => {
     currentPage = 1;
     updateTable();
 });
+
+// Boutons de tri
+
+Array.from(sortFields).forEach(f => {
+    f.addEventListener("click", (e) => {
+
+        Array.from(sortFields).forEach(f => {
+            f.style.backgroundColor = "transparent";
+        });
+
+        // Si on retrie sur le même champ, changer l'ordre (aucun -> croissant -> décroissant)
+        if (sort.order == 0) {
+            sort.order = 1;
+            f.style.backgroundColor = "red";
+        } else if (sort.order == 1) {
+            sort.order = -1;
+            f.style.backgroundColor = "red";
+        } else if (sort.order == -1) {
+            sort.order = 0;
+            f.style.backgroundColor = "transparent";
+        }
+
+        // Si on trie sur un nouveau champ, trier dans l'ordre croissant par défaut
+        if (sort.field != e.target.dataset.field) {
+            sort.order = 1;
+            f.style.backgroundColor = "red";
+        }
+
+        sort.field = e.target.dataset.field;
+        updateTable();
+    });
+})

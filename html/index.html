@@ -17,20 +17,20 @@
     <script src="data/class_pokemon.js"></script>
 </head>
 <body>
-    <div>
+    <div id="filters_fields">
         <select id="type"></select>
         <select id="fast_attack"></select>
-        <input type="text" id="nom">
+        <input id="nom" type="text">
     </div>
 
     <table>
         <thead>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Type(s)</th>
-            <th>Endurance</th>
-            <th>Attaque</th>
-            <th>Défense</th>
+            <th data-field="id">ID</th>
+            <th data-field="name">Nom</th>
+            <th data-field="type">Type(s)</th>
+            <th data-field="stamina">Endurance</th>
+            <th data-field="attack">Attaque</th>
+            <th data-field="defense">Défense</th>
             <th>Image</th>
         </thead>
 

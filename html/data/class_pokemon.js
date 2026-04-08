@@ -6,7 +6,7 @@ class Pokemon {
             if (pokemon.form != "Normal") continue;
 
             let types = pokemon_types.filter(objet => objet.pokemon_id == pokemon.pokemon_id && objet.form == "Normal")[0].type;
-            types = types.map(type => Type.all_types[type]);
+            types = types.map(type => Type.all_types[type]).sort();
 
             let charged_moves = pokemon_moves.filter(objet => objet.pokemon_id == pokemon.pokemon_id && objet.form == "Normal")[0].charged_moves;
             charged_moves = charged_moves.map(attack => Attack.getAttackByName(attack));
