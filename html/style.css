@@ -38,7 +38,15 @@ th:hover {
 
     position: fixed;
     top: 20%;
-    left: 50%;
+
+    @media screen and (min-width: 1001px) {
+        left: 50%;
+    }
+
+    @media screen and (max-width: 1000px) {
+        right: 0;
+        margin: 1em;
+    }
 
     /* background-color: whitesmoke;
     border: 1px solid black; */
