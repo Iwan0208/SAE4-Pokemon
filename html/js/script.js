@@ -3,11 +3,12 @@ Attack.fill_attacks();
 Pokemon.fill_pokemons();
 
 const tbody = document.getElementsByTagName("tbody")[0];
+let infosOpen = false;
 
 // Variables pour la pagination
-const prev = document.getElementById("prev");
-const next = document.getElementById("next");
-const pageSpan = document.getElementById("page");
+const prevs = Array.from(document.getElementsByClassName("prev"));
+const nexts = Array.from(document.getElementsByClassName("next"));
+const pageSpans = Array.from(document.getElementsByClassName("page"));
 
 const PAGE_LIMIT = 25;
 
@@ -31,7 +32,7 @@ const fastAttack = document.getElementById("fast_attack");
 const nom = document.getElementById("nom");
 
 // Variables pour le tri
-const sortFields = document.getElementsByTagName("th");
+const sortFields = document.querySelectorAll("th[data-field]");
 
 // REMPLISSAGE DU TABLEAU
 
@@ -49,7 +50,6 @@ function fillTable(pokemonList) {
 
         let col = document.createElement("td");
         col.textContent = p.pokemon_id;
-        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
@@ -62,17 +62,14 @@ function fillTable(pokemonList) {
 
         col = document.createElement("td");
         col.textContent = p.base_stamina;
-        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
         col.textContent = p.base_attack;
-        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
         col.textContent = p.base_defense;
-        col.classList.add("number");
         ligne.appendChild(col);
 
         col = document.createElement("td");
@@ -82,12 +79,13 @@ function fillTable(pokemonList) {
         let img = document.createElement("img");
         img.setAttribute("src", fileName);
         img.setAttribute("onerror", "this.src='webp/images/image-none.webp'");
+        img.classList.add("sprite");
         
         col.appendChild(img);
-        col.classList.add("sprite");
-
 
         img.addEventListener("mouseover", (event) => {
+            if (infosOpen) return;
+
             let img = event.currentTarget;
             
             let fenetre = document.createElement("div");
@@ -125,24 +123,24 @@ function fillTable(pokemonList) {
             fenetre.setAttribute("id", "infos");
 
             let boutonFermer = document.createElement("button");
-            boutonFermer.setAttribute("onclick", "fermerDetails('infos')");
-            boutonFermer.textContent = "X";
+            boutonFermer.setAttribute("onclick", "fermerDetails('infos'); infosOpen = false;");
+            boutonFermer.innerHTML = "&times";
             fenetre.appendChild(boutonFermer);
 
             let partieHaute = document.createElement('div');
 
-            let nomPokemon = document.createElement("h1");
+            let nomPokemon = document.createElement("h2");
             nomPokemon.textContent = p.pokemon_name;
             partieHaute.appendChild(nomPokemon);
 
             let spritePokemon = document.createElement('img');
             spritePokemon.src = ligne.lastElementChild.children[0].src;
+            spritePokemon.classList.add("sprite");
+            
             partieHaute.appendChild(spritePokemon);
-
-            partieHaute.classList.add("sprite");
             fenetre.appendChild(partieHaute);
 
-            let titre = document.createElement("h2");
+            let titre = document.createElement("h3");
             titre.textContent = "Liste des attaques rapides";
             fenetre.appendChild(titre);
 
@@ -157,7 +155,7 @@ function fillTable(pokemonList) {
             fenetre.appendChild(list);
             
 
-            titre = document.createElement("h2");
+            titre = document.createElement("h3");
             titre.textContent = "Liste des attaques chargées";
             fenetre.appendChild(titre);
 
@@ -171,7 +169,8 @@ function fillTable(pokemonList) {
 
             fenetre.appendChild(list);
             document.getElementById("infos").replaceWith(fenetre);
-
+            
+            infosOpen = true;
         });
 
         tbody.appendChild(ligne);
@@ -204,11 +203,11 @@ function updatePage() {
     if (currentPage > pageCount) currentPage = pageCount;
 
     // Actualiser le numéro de page
-    pageSpan.textContent = `Page ${currentPage} sur ${pageCount}`;
+    pageSpans.forEach(p => { p.textContent = `Page ${currentPage} sur ${pageCount}`});
 
     // Désactiver les boutons si nécessaire
-    prev.disabled = currentPage == 1;
-    next.disabled = currentPage == pageCount;
+    prevs.forEach(p => { p.disabled = currentPage == 1 });
+    nexts.forEach(n => { n.disabled = currentPage == pageCount });
 
     // Cacher toutes les lignes
     hideRows();
@@ -377,25 +376,25 @@ Array.from(sortFields).forEach(f => {
     f.addEventListener("click", (e) => {
 
         Array.from(sortFields).forEach(f => {
-            f.style.backgroundColor = "transparent";
+            f.classList.remove("sorted");
         });
 
         // Si on retrie sur le même champ, changer l'ordre (aucun -> croissant -> décroissant)
         if (sort.order == 0) {
             sort.order = 1;
-            f.style.backgroundColor = "red";
+            f.classList.add("sorted");
         } else if (sort.order == 1) {
             sort.order = -1;
-            f.style.backgroundColor = "red";
+            f.classList.add("sorted");
         } else if (sort.order == -1) {
             sort.order = 0;
-            f.style.backgroundColor = "transparent";
+            f.classList.remove("sorted");
         }
 
         // Si on trie sur un nouveau champ, trier dans l'ordre croissant par défaut
         if (sort.field != e.target.dataset.field) {
             sort.order = 1;
-            f.style.backgroundColor = "red";
+            f.classList.add("sorted");
         }
 
         sort.field = e.target.dataset.field;

@@ -18,10 +18,18 @@
     <script src="data/class_pokemon.js"></script>
 </head>
 <body>
+    <h1><img src="webp/images/logo.png"></h1>
+
     <div id="filters_fields">
         <select id="type"></select>
         <select id="fast_attack"></select>
-        <input id="nom" type="text">
+        <input id="nom" type="text" placeholder="Nom (ex : Pikachu)">
+    </div>
+
+    <div class="pages">
+        <button class="prev" onclick="prevPage()">PRÉC</button>
+        <button class="next" onclick="nextPage()">SUIV</button>
+        <span class="page"></span>
     </div>
 
     <div class="tablecontainer">
@@ -30,9 +38,9 @@
                 <th data-field="id">ID</th>
                 <th data-field="name">Nom</th>
                 <th data-field="type">Type(s)</th>
-                <th data-field="stamina">Endurance</th>
-                <th data-field="attack">Attaque</th>
-                <th data-field="defense">Défense</th>
+                <th data-field="stamina" class="number">Endurance</th>
+                <th data-field="attack" class="number">Attaque</th>
+                <th data-field="defense" class="number">Défense</th>
                 <th>Image</th>
             </thead>
             
@@ -40,17 +48,16 @@
                 <!-- Rempli dynamiquement -->
             </tbody>
         </table>
-    </div>
-    
-    <div id="details">
+        
         <div id="infos" style="display: none"></div>
         <div id="image-zoom"></div>
     </div>
+    
 
-    <div>
-        <button id="prev" onclick="prevPage()">PRÉC</button>
-        <button id="next" onclick="nextPage()">SUIV</button>
-        <span id="page"></span>
+    <div class="pages">
+        <button class="prev" onclick="prevPage()">PRÉC</button>
+        <button class="next" onclick="nextPage()">SUIV</button>
+        <span class="page"></span>
     </div>
 </body>
 

@@ -1,75 +1,272 @@
+* {
+    font-family: "Montserrat", "Helvetica", sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 2em;
+    min-width: 340px;
+}
+
+h1 {
+    width: 100%;
+
+    img {
+        height: 100px;        
+    }
+}
+
+h2 {
+    font-size: 2em;
+    margin: 0;
+}
+
+#filters_fields {
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 2em;
+}
+
+input, select {
+    padding: 0.5em;
+    border-radius: 5px;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+.pages {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+
+    button {
+        padding: 0.5em 1em;
+    }
+
+    .prev {
+        background-color: #fee581;
+    }
+
+    .next {
+        background-color: #5778be;
+    }
+
+    button, span {
+        font-weight: bold;
+    }
+}
+
+.pages button:hover {
+    background-color: rgb(233, 231, 231);
+}
+
+.tablecontainer {
+    position: relative;
+    display: flex;
+    align-items: start;
+    padding: 2em 0;
+    gap: 3em;
+
+    @media screen and (max-width: 1024px) {
+        display: block;
+    }
+}
+
+#image-zoom, #infos {
+    position: sticky;
+    flex-basis: 25%;
+    top: 2em;
+    animation: fade-in 0.5s;
+}
+
+#image-zoom img {
+    width: 100%; 
+    height: auto;
+}
+
 table {
     border-collapse: collapse;
-    width: 50em;
+    flex-basis: 65%;
+
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+    }
+}
+
+thead {
+    background-color: rgb(56, 56, 183);
+    color: white;
 }
 
 td, th {
-    border: 1px solid black;
-
-    padding: 0.5em;
-
-    max-width: 25%;
+    text-align: center;
 }
 
-tr:hover {
+td {
+    padding: 0.25em;
+}
+
+th {
+    padding: 0.75em;
+}
+
+tbody tr:nth-child(odd) {
     background-color: whitesmoke;
+}
+
+tbody tr:hover {
+    background-color: rgb(233, 231, 231);
     cursor: pointer;
 }
 
+th {
+    font-weight: normal;
+}
+
+th.sorted {
+    font-weight: bold;
+}
+
 th:hover {
-    cursor: default;
+    cursor: pointer;
+}
+
+th[data-field="name"] {
+    width: 10em;
 }
 
 .number, .sprite {
-    text-align: center;
-    width: 10%
+    width: 5em;
 }
 
-.sprite img {
+.sprite {
     width: 48px;
     height: 48px;
 }
 
-.tablecontainer {
-    overflow-x: auto;
-}
+#infos {
+    background-color: whitesmoke;
+    border: solid 4px black;
+    padding: 2.5em;
 
-#details {
-
-    position: fixed;
-    top: 20%;
-
-    @media screen and (min-width: 1001px) {
-        left: 50%;
+    button {
+        font-size: 2em;
+        cursor: pointer;
     }
 
-    @media screen and (max-width: 1000px) {
-        right: 0;
-        margin: 1em;
-    }
+    > div {
+        display: flex;
+        justify-content: space-between;
+        margin: 1em 0;
 
-    /* background-color: whitesmoke;
-    border: 1px solid black; */
-
-
-    display: flex;
-
-    >div {
-
-        >div {
-            display:flex;
-            justify-content: space-between;
-            margin: 1em 0;
-
-            h1 {
-                margin: 0;
-            }
-
+        h1 {
+            margin: 0;
         }
     }
 }
 
-#infos {
-    background-color: whitesmoke;
-    padding: 2.5em;
+@keyframes fade-in {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; top: 0; transform: translateX(0); }
+}
+
+@media only screen and (max-width: 1024px), (max-width: 760px) {
+    #infos {
+        position: fixed;
+        left: 3em;
+        right: 3em;
+        top: 2em;
+    }
+
+    #image-zoom {
+        position: fixed;
+        left: 2em;
+        top: 2em;
+        
+        img {
+            padding: 1em;
+            background-color: white;
+            border: solid 4px black;
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    #image-zoom img {
+        max-width: 33vw;
+    }
+}
+
+@media only screen and (max-width: 760px) {
+    h1 {
+        text-align: center;
+    }
+
+    input, select, .pages button {
+        padding: 1em;
+        font-size: 1.1em;
+    }
+
+    .pages {
+        flex-wrap: wrap;
+
+        button {
+            flex-grow: 1;
+        }
+
+        span {
+            flex-basis: 100%;
+            text-align: center;
+        }
+    }
+    
+    #filters_fields {
+        flex-direction: column;
+    }
+
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+    }
+    
+    th { 
+        display: none;
+    }
+
+    td > .sprite {
+        width: 15%;
+        height: auto;
+    }
+    
+    td { 
+        border: none;
+        position: relative;
+        padding-left: 50%; 
+    }
+    
+    td:before { 
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+    }
+
+    td:nth-of-type(1):before { content: "ID"; }
+    td:nth-of-type(2):before { content: "Nom"; }
+    td:nth-of-type(3):before { content: "Type"; }
+    td:nth-of-type(4):before { content: "Endurance"; }
+    td:nth-of-type(5):before { content: "Attaque"; }
+    td:nth-of-type(6):before { content: "Défense"; }
+
+    td:nth-of-type(7) {
+        padding: 0.5em;
+    }
+
+    #image-zoom img {
+        max-width: 25vw;
+    }
 }
