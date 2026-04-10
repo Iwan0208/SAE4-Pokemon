@@ -1,0 +1,36 @@
+---- PARTIE 1 ----
+
+classe Type:
+	Thomas : 100%
+
+classe Move:
+	Iwan : 100%
+
+classe Pokémon:
+	Thomas : 20%
+	Iwan : 80%
+
+Questions test partie 1:
+	Q1: Thomas
+	Q2: Iwan
+	Q3: Iwan
+	Q4: Thomas
+	Q5: Iwan
+	Q6: Thomas
+	Q7: Iwan
+	
+---- PARTIE 2 ---- 
+
+Structure de page : Iwan
+
+Pagination : Thomas
+
+Détails : Iwan
+
+Filtrage : Thomas
+
+Tri : Thomas
+
+CSS:
+	Iwan : 30%
+	Thomas : 70%
